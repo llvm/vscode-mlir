@@ -4,6 +4,7 @@ on:
   # Run whenever a new commit is pushed to the main branch.
   push:
     branches: [ main ]
+    paths: [ 'package.json' ]
   workflow_dispatch:
 
 jobs:
