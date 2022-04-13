@@ -16,6 +16,7 @@ jobs:
     - name: detect version
       uses: EndBug/version-check@v2.0.1
       id: check
+      if: github.event_name != 'workflow_dispatch'
       with:
         # Search the diff content for version changes.
         diff-search: true
