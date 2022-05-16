@@ -29,6 +29,7 @@ jobs:
         run: |
           cp -r llvm_src/mlir/utils/vscode/. ./
           cp llvm_src/mlir/utils/textmate/mlir.json ./grammar.json
+          cp llvm_src/llvm/utils/textmate/tablegen.json ./tablegen-grammar.json
           cp llvm_src/mlir/LICENSE.TXT ./LICENSE
           curl https://mlir.llvm.org//LogoAssets/logo/PNG/full_color/mlir-identity-03.png > ./icon.png
           sed -i '/grammar.json/d' ./.gitignore
