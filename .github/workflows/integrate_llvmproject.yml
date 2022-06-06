@@ -36,9 +36,15 @@ jobs:
 
           # Build the README from the up-to-date MLIR documentation.
           printf "# MLIR\n" > README.md
-          printf "$(sed "/^### Visual Studio Code$/,/^(#|##|###) /!d;//d;" llvm_src/mlir/docs/Tools/MLIRLSP.md | sed "s/^##//")\n\n## Features\n\n" >> README.md
-          sed '/^### Features$/,/^### /!d;//d;' llvm_src/mlir/docs/Tools/MLIRLSP.md | sed 's/^#//' | sed -n '/^#/,$p' >> README.md
+          printf "$(sed "/^### Visual Studio Code$/,/^(#|##|###) /!d;//d;" llvm_src/mlir/docs/Tools/MLIRLSP.md | sed "s/^##//")\n\n" >> README.md
+
+          MLIR_FEATURES=$(sed '/^\[mlir features\]: #$/,/^## /!d;//d;' llvm_src/mlir/docs/Tools/MLIRLSP.md | sed -n '/^#/,$p')
+          awk -i inplace -v r="$MLIR_FEATURES" '{gsub(/\[mlir-vscode features\]: #/,r)}1' README.md
+          PDLL_FEATURES=$(sed '/^\[pdll features\]: #$/,/^## /!d;//d;' llvm_src/mlir/docs/Tools/MLIRLSP.md | sed -n '/^#/,$p')
+          awk -i inplace -v r="$PDLL_FEATURES" '{gsub(/\[pdll-vscode features\]: #/,r)}1' README.md
+
           sed -i 's|](/mlir-lsp-server/|](https://mlir.llvm.org/mlir-lsp-server/|g' README.md
+          sed -i 's|](/mlir-pdll-lsp-server/|](https://mlir.llvm.org/mlir-pdll-lsp-server/|g' README.md
 
       - name: Commit updated source
         run: |
