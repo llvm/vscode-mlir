@@ -90,6 +90,14 @@ symbol, such as a `func.func`, within the file.
 
 ![IMG](https://mlir.llvm.org/mlir-lsp-server/navigation.gif)
 
+#### Bytecode Editing and Inspection
+
+The language server provides support for interacting with MLIR bytecode files,
+enabling IDEs to transparently view and edit bytecode files in the same way
+as textual `.mlir` files.
+
+![IMG](https://mlir.llvm.org/mlir-lsp-server/bytecode_edit.gif)
+
 ### Setup
 
 #### `mlir-lsp-server`
@@ -184,9 +192,9 @@ The language server provides additional information inline with the source code.
 Editors usually render this using read-only virtual text snippets interspersed
 with code. Hints may be shown for:
 
-* types of local variables
-* names of operand and result groups
-* constraint and rewrite arguments
+- types of local variables
+- names of operand and result groups
+- constraint and rewrite arguments
 
 ![IMG](https://mlir.llvm.org/mlir-pdll-lsp-server/inlay_hints.png)
 
@@ -244,6 +252,18 @@ Jump to the definition of a symbol under the cursor:
 Show all references of the symbol under the cursor.
 
 ![IMG](https://mlir.llvm.org/tblgen-lsp-server/find_references.gif)
+
+#### Hover
+
+Hover over a symbol to see more information about it, such as its type,
+documentation, and more.
+
+![IMG](https://mlir.llvm.org/tblgen-lsp-server/hover_def.png)
+
+Hovering over an overridden field will also show you information such as
+documentation from the base value:
+
+![IMG](https://mlir.llvm.org/tblgen-lsp-server/hover_field.png)
 
 ### Setup
 
