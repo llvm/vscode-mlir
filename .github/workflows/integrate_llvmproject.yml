@@ -11,6 +11,8 @@ on:
 
 jobs:
   build-deploy:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Timestamp Begin
@@ -26,6 +28,7 @@ jobs:
           path: 'llvm_src'
 
       - name: Update extension source
+        id: update
         run: |
           cp -r llvm_src/mlir/utils/vscode/. ./
           cp llvm_src/mlir/utils/textmate/mlir.json ./grammar.json
@@ -49,13 +52,19 @@ jobs:
           sed -i 's|](/mlir-pdll-lsp-server/|](https://mlir.llvm.org/mlir-pdll-lsp-server/|g' README.md
           sed -i 's|](/tblgen-lsp-server/|](https://mlir.llvm.org/tblgen-lsp-server/|g' README.md
 
-      - name: Commit updated source
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -- . ':!llvm_src/'
-          git commit -m "Integrate from LLVM at llvm/llvm-project@$(cd llvm_src/ && (git rev-parse HEAD | head -1) && cd ..)" -a || echo "Extension source is already up-to-date"
-          git push || 0
+          echo "MESSAGE=Integrate from LLVM at llvm/llvm-project@$(cd llvm_src/ && (git rev-parse HEAD | head -1) && cd ..)"
+          rm -rf llvm_src
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: main
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          full_commit_message: ${{ steps.update.outputs.MESSAGE }}
 
       - name: Timestamp End
         run: date
