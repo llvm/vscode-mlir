@@ -1,5 +1,5 @@
 # This workflow publishes the extension to the VSCode marketplace when the version changes.
-name: Publish to VSCode and OpenVSX Marketplace
+name: Publish to OpenVSX
 on:
   # Run whenever a new commit is pushed to the main branch.
   push:
@@ -21,12 +21,6 @@ jobs:
         # Search the diff content for version changes.
         diff-search: true
 
-    - name: publish
-      # if: steps.check.outputs.changed == 'true'
-      # The token will be expired in on 08/03/2022.
-      run: |
-        npm install
-        npm run publish -- -p "${{ secrets.VSCODE_MARKETPLACE_TOKEN }}"
     - name: publish to OpenVSX
       # if: steps.check.outputs.changed == 'true'
       # The token will expire. Regenerate it at:
