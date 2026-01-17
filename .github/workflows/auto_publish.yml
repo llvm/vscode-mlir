@@ -21,8 +21,8 @@ jobs:
         # Search the diff content for version changes.
         diff-search: true
 
-    - name: npm ci
-      run: npm ci
+    - name: Install deps
+      run: npm install
 
     - name: publish
       # if: steps.check.outputs.changed == 'true'
