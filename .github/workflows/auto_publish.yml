@@ -21,15 +21,14 @@ jobs:
         # Search the diff content for version changes.
         diff-search: true
 
-    - name: Install dependencies
-      run: npm install
+    - name: npm ci
+      run: npm ci
 
     - name: publish
       # if: steps.check.outputs.changed == 'true'
       # Token will expire. Regenerate it at Azure DevOps portal
-      run: |
-        npm install
-        npm run publish -- -p "${{ secrets.VSCODE_MARKETPLACE_TOKEN }}"
+      run: npm run publish -- -p "${{ secrets.VSCODE_MARKETPLACE_TOKEN }}"
+
     - name: publish to OpenVSX
       # if: steps.check.outputs.changed == 'true'
       # The token will expire. Regenerate it at:
