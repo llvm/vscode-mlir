@@ -21,6 +21,9 @@ jobs:
         # Search the diff content for version changes.
         diff-search: true
 
+    - name: Install dependencies
+      run: npm install
+
     - name: publish to OpenVSX
       # if: steps.check.outputs.changed == 'true'
       # The token will expire. Regenerate it at:
