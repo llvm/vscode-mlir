@@ -27,3 +27,8 @@ jobs:
       run: |
         npm install
         npm run publish -- -p "${{ secrets.VSCODE_MARKETPLACE_TOKEN }}"
+    - name: publish to OpenVSX
+      # if: steps.check.outputs.changed == 'true'
+      # The token will expire. Regenerate it at:
+      # https://open-vsx.org/user-settings/tokens
+      run: npm run publish-openvsx -- -p "${{ secrets.OPENVSX_TOKEN }}"
