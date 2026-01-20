@@ -1,7 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+//# #if HAVE_VSCODE
 import * as vscode from 'vscode';
 import * as vscodelc from 'vscode-languageclient/node';
+//# #elif HAVE_COC_NVIM
+//# import * as vscode from 'coc.nvim';
+//# import * as vscodelc from 'coc.nvim';
+//# #endif
 
 import * as config from './config';
 import * as configWatcher from './configWatcher';
@@ -37,7 +42,13 @@ export class MLIRContext implements vscode.Disposable {
     // document. It removes the need to pro-actively start language clients for
     // every folder within the workspace and every language type we provide.
     const startClientOnOpenDocument = async (document: vscode.TextDocument) => {
-      await this.getOrActivateLanguageClient(document.uri, document.languageId);
+      await this.getOrActivateLanguageClient(
+        //# #if HAVE_VSCODE
+        document.uri,
+        //# #elif HAVE_COC_NVIM
+        //# vscode.Uri.parse(document.uri),
+        //# #endif
+        document.languageId);
     };
     // Process any existing documents.
     for (const textDoc of vscode.workspace.textDocuments) {
@@ -118,7 +129,12 @@ export class MLIRContext implements vscode.Disposable {
     // 'build' directory within the current workspace.
     if (databases.length === 0) {
       if (workspaceFolder) {
-        databases.push(workspaceFolder.uri.fsPath +
+        databases.push(
+          //# #if HAVE_VSCODE
+          workspaceFolder.uri.fsPath +
+          //# #elif HAVE_COC_NVIM
+          //# vscode.Uri.parse(workspaceFolder.uri).fsPath +
+          //# #endif
                        `/build/${languageName}_compile_commands.yml`);
       }
 
@@ -225,6 +241,7 @@ export class MLIRContext implements vscode.Disposable {
       return [ null, serverPath ];
     }
 
+    //# #if HAVE_VSCODE
     // Check that the file actually exists.
     if (!fs.existsSync(serverPath)) {
       vscode.window
@@ -241,6 +258,7 @@ export class MLIRContext implements vscode.Disposable {
           });
       return [ null, serverPath ];
     }
+    //# #endif
 
     // Configure the server options.
     const serverOptions: vscodelc.ServerOptions = {
@@ -253,7 +271,13 @@ export class MLIRContext implements vscode.Disposable {
     let selectorPattern: string = null;
     if (workspaceFolder) {
       filePattern = new vscode.RelativePattern(workspaceFolder, filePattern);
-      selectorPattern = `${workspaceFolder.uri.fsPath}/**/*`;
+      selectorPattern = `${
+//# #if HAVE_VSCODE
+workspaceFolder.uri
+//# #elif HAVE_COC_NVIM
+//# vscode.Uri.parse(workspaceFolder.uri)
+//# #endif
+.fsPath}/**/*`;
     }
 
     // Configure the middleware of the client. This is sort of abused to allow
