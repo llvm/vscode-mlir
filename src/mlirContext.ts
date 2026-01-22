@@ -332,10 +332,9 @@ export class MLIRContext implements vscode.Disposable {
 
     // If a path hasn't been set, try to use the default path.
     if (filePath === '') {
-      if (defaultPath === '') {
-        return filePath;
+      if (defaultPath !== '') {
+        return defaultPath;
       }
-      filePath = defaultPath;
 
       // Fallthrough to try resolving the default path.
     }
