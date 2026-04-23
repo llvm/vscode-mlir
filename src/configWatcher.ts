@@ -1,5 +1,9 @@
 import * as chokidar from 'chokidar';
+//# #if HAVE_VSCODE
 import * as vscode from 'vscode';
+//# #elif HAVE_COC_NVIM
+//# import * as vscode from 'coc.nvim';
+//# #endif
 
 import * as config from './config';
 import {MLIRContext} from './mlirContext';
@@ -71,6 +75,7 @@ export async function activate(
     }
 
     // If the server path actually exists, track it in case it changes.
+    //# #if HAVE_VSCODE
     const fileWatcher = chokidar.watch(serverPath, fileWatcherConfig);
     fileWatcher.on('all', (event, _filename, _details) => {
       if (event != 'unlink') {
@@ -81,5 +86,6 @@ export async function activate(
     });
     mlirContext.subscriptions.push(
         new vscode.Disposable(() => { fileWatcher.close(); }));
+    //# #endif
   }
 }
