@@ -1,3 +1,4 @@
+//# #if HAVE_VSCODE
 import * as vscode from 'vscode';
 import {MLIRContext} from './mlirContext';
 
@@ -23,3 +24,4 @@ export abstract class Command extends vscode.Disposable {
    */
   abstract execute(...args: any[]): any;
 }
+//# #endif

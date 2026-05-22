@@ -1,4 +1,8 @@
+//# #if HAVE_VSCODE
 import * as vscode from 'vscode';
+//# #elif HAVE_COC_NVIM
+//# import * as vscode from 'coc.nvim';
+//# #endif
 
 /**
  *  Gets the config value `mlir.<key>`, with an optional workspace folder.
